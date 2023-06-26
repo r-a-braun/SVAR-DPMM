@@ -60,6 +60,7 @@ alpha_fc = 0.3;
 subplot(2,2,4)
 hold on; grid on;
 p1=histogram(output_baseline_Gauss.MontielOlseaStat_mcmc(1,:),50,'Normalization','pdf','FaceColor',color_2,'FaceAlpha',alpha_fc) ;
+p1.LineStyle='--';
 p2=histogram(output_baseline_Gauss.MontielOlseaStat_mcmc(2,:),50,'Normalization','pdf','FaceColor',color_3,'FaceAlpha',alpha_fc);
 xlim([0,0.3])
 legend([p1 p2],{'$S(E)$','$S_{0}(E)$'},'interpreter','latex')
@@ -67,8 +68,11 @@ title('$S(E)$ (Gaussian)','interpreter','latex')
 hold off
 subplot(2,2,3)
 hold on; grid on;
-p1=histogram(output_baseline_Gauss.MattesonTsayStat_mcmc(1,:),50,'Normalization','pdf','FaceColor',color_2,'FaceAlpha',alpha_fc) ;
-p2=histogram(output_baseline_Gauss.MattesonTsayStat_mcmc(2,:),50,'Normalization','pdf','FaceColor',color_3,'FaceAlpha',alpha_fc);
+p1=histogram(output_baseline_Gauss.MattesonTsayStat_mcmc(1,:),50,...
+    'Normalization','pdf','FaceColor',color_2,'FaceAlpha',alpha_fc) ;
+p1.LineStyle='--'; 
+p2=histogram(output_baseline_Gauss.MattesonTsayStat_mcmc(2,:),50,...
+    'Normalization','pdf','FaceColor',color_3,'FaceAlpha',alpha_fc);
 legend([p1 p2],{'$U(E)$','$U_{0}(E)$'},'interpreter','latex')
 xlim([-0.3,1])
 title('$U(E)$ (Gaussian)','interpreter','latex')
@@ -76,6 +80,7 @@ hold off
 subplot(2,2,2)
 hold on; grid on;
 p1 = histogram(output_baseline_NG.MontielOlseaStat_mcmc(1,:),50,'Normalization','pdf','FaceColor',color_1,'FaceAlpha',alpha_fc) ;
+p1.LineStyle='--'; 
 p2 = histogram(output_baseline_NG.MontielOlseaStat_mcmc(2,:),50,'Normalization','pdf','FaceColor',color_3,'FaceAlpha',alpha_fc);
 xlim([0,0.3])
 title('$S(E)$ (Non-Gaussian)','interpreter','latex')
@@ -84,6 +89,7 @@ hold off
 subplot(2,2,1)
 hold on; grid on;
 p1 = histogram(output_baseline_NG.MattesonTsayStat_mcmc(1,:),50,'Normalization','pdf','FaceColor',color_1,'FaceAlpha',alpha_fc) ;
+p1.LineStyle='--'; 
 p2 = histogram(output_baseline_NG.MattesonTsayStat_mcmc(2,:),50,'Normalization','pdf','FaceColor',color_3,'FaceAlpha',alpha_fc);
 legend([p1 p2],{'$U(E)$','$U_{0}(E)$'},'interpreter','latex')
 xlim([-0.3,1])
@@ -91,7 +97,9 @@ title('$U(E)$ (Non-Gaussian)','interpreter','latex')
 hold off
 set(hFig4,'PaperPositionMode','auto')
 set(hFig4, 'Position', [30 20 800 400])
-hFig4 = tightfig(hFig4);
+hFig4 = tightfig(hFig4); 
+
+
 print(hFig4,'results/Figures/Figure_4_Independence', '-painters' ,'-dpdf')
 close(hFig4)
 
@@ -285,16 +293,17 @@ for ii = 1:n
     for i = 1:n
         subplot(n,n,a)
         hold on; grid on;
-        plot(horizon, IRFqs_G(:,(ii*n-n)+i ,3), 'b','LineWidth', 1.3,'markersize',3)
+        p1 = plot(horizon, IRFqs_G(:,(ii*n-n)+i ,3), 'b','LineWidth', 1.3,'markersize',3);
+        p1.LineStyle = '--';
         plot(horizon, IRFqs_NG(:,(ii*n-n)+i ,3), 'r','LineWidth', 1.3,'markersize',3)
         line([horizon(1),horizon(end)],[0,0],'color',[105,105,105]./255 )
         Y_1 = [IRFqs_NG( :, (ii*n-n)+i,1)', fliplr(IRFqs_NG(:,(ii*n-n)+i,5)')];
-        bounds = fill(xgraph,Y_1,color_1,'LineStyle','none');
-        set(bounds,'FaceColor',color_1,'EdgeColor',color_1,'FaceAlpha',facealpha,'EdgeAlpha',facealpha);
+        bounds = fill(xgraph,Y_1,color_1,'LineStyle','-');
+        set(bounds,'FaceColor',color_1,'EdgeColor',color_1,'FaceAlpha',facealpha);
         line([horizon(1),horizon(end)],[0,0],'color',[105,105,105]./255 )
         Y_1 = [IRFqs_G( :, (ii*n-n)+i,1)', fliplr(IRFqs_G(:,(ii*n-n)+i,5)')];
-        bounds = fill(xgraph,Y_1,color_2,'LineStyle','none');
-        set(bounds,'FaceColor',color_2,'EdgeColor',color_2,'FaceAlpha',facealpha,'EdgeAlpha',facealpha);
+        bounds = fill(xgraph,Y_1,color_2,'LineStyle','--');
+        set(bounds,'FaceColor',color_2,'EdgeColor',color_2,'FaceAlpha',facealpha);
         hold off
         xlim([horizon(1),horizon(end)])
         title(strcat('$',shocks{ii},' \rightarrow',variables{i},'$'),'Interpreter','latex')
